@@ -1,11 +1,18 @@
-// Curator allowlist. Supabase sign-up is open to anyone holding the public key,
-// so being logged in is not enough: the email must also be listed in CURATOR_EMAILS
-// (comma-separated). If the variable is missing, nobody is a curator (fail closed).
-export function isCuratorEmail(email: string | null | undefined): boolean {
-  if (!email) return false;
-  const allowed = (process.env.CURATOR_EMAILS ?? "")
+// Owners are named in the environment (OWNER_EMAILS, or the older CURATOR_EMAILS).
+// They always have access and manage everyone else from /admin/curators.
+// Ordinary curators live in the `curators` table, never in the environment.
+export function ownerEmails(): string[] {
+  return (process.env.OWNER_EMAILS ?? process.env.CURATOR_EMAILS ?? "")
     .split(",")
-    .map((entry) => entry.trim().toLowerCase())
+    .map((e) => e.trim().toLowerCase())
     .filter(Boolean);
-  return allowed.includes(email.trim().toLowerCase());
+}
+
+export function isOwnerEmail(email: string | null | undefined): boolean {
+  if (!email) return false;
+  return ownerEmails().includes(email.trim().toLowerCase());
+}
+
+export function normalizeEmail(email: string): string {
+  return email.trim().toLowerCase();
 }

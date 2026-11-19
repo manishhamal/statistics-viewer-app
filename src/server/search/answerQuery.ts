@@ -2,23 +2,23 @@ import { loadCatalog, rankIndicators } from "./findCandidates";
 import { runPlan } from "./runPlan";
 import { interpretWithModel } from "@/server/llm/llmClient";
 import type { SearchPlan } from "@/lib/schemas";
+import { fmt, type Lang } from "@/i18n/config";
+import { getDictionary } from "@/i18n/dictionaries";
+import { formatNumber, localized } from "@/i18n/format";
 
-export async function answerQuery(question: string) {
+export async function answerQuery(question: string, lang: Lang = "en") {
+  const t = getDictionary(lang).search;
   const catalog = await loadCatalog();
-  if (catalog.length === 0) {
-    return {
-      answer: "The indicator catalogue is empty. Run supabase/seed.sql in the Supabase SQL editor, then try again.",
-      rows: [],
-    };
-  }
+  if (catalog.length === 0) return { answer: t.emptyCatalogue, rows: [] };
 
   // 1. Let Gemini choose from the whole catalogue (only codes it returns are accepted).
+  //    Nepali names are included so questions in Nepali match too.
   const aiPlan = await interpretWithModel(
     question,
-    catalog.map((indicator) => ({ code: indicator.code, name: indicator.name })),
+    catalog.map((indicator) => ({ code: indicator.code, name: indicator.name, name_ne: indicator.name_ne ?? undefined })),
   );
 
-  // 2. If the AI is unavailable or unsure, use keyword matching.
+  // 2. If the AI is unavailable or unsure, use keyword matching (English and Nepali).
   let plan: SearchPlan;
   if (aiPlan?.indicator_code) {
     plan = {
@@ -32,9 +32,7 @@ export async function answerQuery(question: string) {
     };
   } else {
     const [best] = rankIndicators(question, catalog);
-    if (!best) {
-      return { answer: "I could not match that question to a catalogued indicator.", rows: [] };
-    }
+    if (!best) return { answer: t.noMatch, rows: [] };
     plan = {
       matched: true,
       indicator_code: best.indicator.code,
@@ -46,14 +44,12 @@ export async function answerQuery(question: string) {
   }
 
   const result = await runPlan(plan);
-  if (!result.indicator) {
-    return { answer: "I could not match that question to a catalogued indicator.", rows: [] };
-  }
-  const name = result.indicator.name;
+  if (!result.indicator) return { answer: t.noMatch, rows: [] };
+  const name = localized(result.indicator, "name", lang);
   return {
     answer: result.rows.length
-      ? `Found ${result.rows.length} published observation(s) for ${name}.`
-      : `No published observations were found for ${name}. The catalogue has the indicator, but no verified values are published yet.`,
+      ? fmt(t.found, { count: formatNumber(result.rows.length, lang), name })
+      : fmt(t.noneFound, { name }),
     rows: result.rows,
     indicator: result.indicator,
   };

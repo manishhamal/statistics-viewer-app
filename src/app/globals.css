@@ -1,2 +1,7 @@
 @import "tailwindcss";
-:root{--background:#f5f6f0;--foreground:#10283f;--navy:#10283f;--deep:#071827;--paper:#f5f6f0;--surface:#fff;--lime:#d8f35b;--blue:#2c6eaa;--muted:#617080;--border:#dce2e4}*{box-sizing:border-box}html,body{margin:0;background:var(--paper);color:var(--foreground);font-family:Arial,Helvetica,sans-serif}::selection{background:var(--lime);color:var(--navy)}:focus-visible{outline:3px solid var(--lime);outline-offset:3px}.surface-panel{background:#fff;border:1px solid var(--border);border-radius:14px;box-shadow:0 8px 24px rgb(16 40 63 / 5%)}.eyebrow-label{color:var(--blue);font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+:root{--background:#f5f6f0;--foreground:#10283f;--navy:#10283f;--deep:#071827;--paper:#f5f6f0;--surface:#fff;--lime:#d8f35b;--blue:#2c6eaa;--muted:#617080;--border:#dce2e4}*{box-sizing:border-box}html,body{margin:0;background:var(--paper);color:var(--foreground);font-family:Arial,"Noto Sans Devanagari","Nirmala UI",Mangal,Helvetica,sans-serif}::selection{background:var(--lime);color:var(--navy)}:focus-visible{outline:3px solid var(--lime);outline-offset:3px}.surface-panel{background:#fff;border:1px solid var(--border);border-radius:14px;box-shadow:0 8px 24px rgb(16 40 63 / 5%)}.eyebrow-label{color:var(--blue);font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+
+/* Nepali: Devanagari-first fonts, roomier lines, and no letter-spacing (it breaks conjunct letters). */
+:lang(ne) body,body:lang(ne){font-family:"Noto Sans Devanagari","Nirmala UI",Mangal,Arial,sans-serif;line-height:1.6}
+:lang(ne) .eyebrow-label,:lang(ne) [class*="tracking-"]{letter-spacing:0!important}
+:lang(ne) h1,:lang(ne) h2,:lang(ne) h3{line-height:1.35}

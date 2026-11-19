@@ -1,5 +1,19 @@
+import { NextResponse } from "next/server";
+import { requireCurator } from "@/server/auth/session";
+import { createPeriod } from "@/server/admin/createPeriod";
+import { firstIssue, periodInputSchema } from "@/lib/adminSchemas";
+import { errorResponse } from "@/server/http";
+import { logAudit } from "@/server/audit";
 
-import { NextResponse } from 'next/server';
-import { requireCurator } from '@/server/auth/session';
-import { getAdminDbClient } from '@/server/db/client';
-export async function POST(request:Request){try{await requireCurator();const body=await request.json();const {data,error}=await getAdminDbClient().from('periods').insert(body).select('*').single();if(error)throw new Error(error.message);return NextResponse.json(data);}catch(error){return NextResponse.json({error:error instanceof Error?error.message:'Invalid period request.'},{status:400});}}
+export async function POST(request: Request) {
+  try {
+    const curator = await requireCurator();
+    const parsed = periodInputSchema.safeParse(await request.json());
+    if (!parsed.success) throw new Error(firstIssue(parsed.error));
+    const period = await createPeriod(parsed.data);
+    await logAudit(curator, "period.create", { type: "period", id: period.id }, { type: period.type, label: period.label });
+    return NextResponse.json(period);
+  } catch (error) {
+    return errorResponse(error, "Invalid period request.");
+  }
+}

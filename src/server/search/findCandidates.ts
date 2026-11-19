@@ -23,23 +23,50 @@ const SYNONYMS: Record<string, string[]> = {
   forex: ["foreign", "exchange"],
   dollar: ["usd"],
   dollars: ["usd"],
+  // Nepali everyday words -> catalogue words (English and Nepali names both match).
+  "महँगी": ["cpi", "consumer", "price", "मुद्रास्फीति"],
+  "महंगी": ["cpi", "consumer", "price", "मुद्रास्फीति"],
+  "मूल्य": ["cpi", "consumer", "price"],
+  "मुद्रास्फीति": ["cpi", "consumer", "price"],
+  "मुद्रा": ["broad", "m2", "supply"],
+  "मुद्राप्रदाय": ["broad", "m2", "supply"],
+  "पैसा": ["broad", "m2", "supply"],
+  "सञ्चिति": ["foreign", "exchange", "reserve"],
+  "संचिति": ["foreign", "exchange", "reserve", "सञ्चिति"],
+  "विदेशी": ["foreign"],
+  "विनिमय": ["exchange"],
+  "डलर": ["usd"],
 };
+
+// Nepali question words and particles that say nothing about the indicator.
+const STOPWORDS_NE = new Set(["के", "कति", "छ", "थियो", "हो", "र", "मा", "को", "देखाउ", "देखाउनुहोस्", "नेपाल", "भयो", "कसरी", "बारे", "हालको"]);
+// Postpositions that attach to Nepali words: "मुद्रास्फीतिको" -> "मुद्रास्फीति".
+const NE_SUFFIXES = ["हरूको", "हरू", "लाई", "बाट", "सम्म", "को", "का", "की", "मा", "ले"];
 
 export function tokenize(text: string): string[] {
   return text
     .toLowerCase()
-    .replace(/[^a-z0-9\s]/g, " ")
+    .replace(/[^\p{L}\p{M}\p{N}\s]/gu, " ") // keep letters (incl. Devanagari vowel signs) and digits
     .split(/\s+/)
-    .filter((word) => word.length > 1 && !STOPWORDS.has(word));
+    .filter((word) => word.length > 1 && !STOPWORDS.has(word) && !STOPWORDS_NE.has(word));
+}
+
+function stripNepaliSuffix(word: string): string {
+  for (const suffix of NE_SUFFIXES) {
+    if (word.length > suffix.length + 1 && word.endsWith(suffix)) return word.slice(0, -suffix.length);
+  }
+  return word;
 }
 
 function queryTerms(question: string): string[] {
   const terms = new Set<string>();
-  for (const word of tokenize(question)) {
-    terms.add(word);
-    // Simple plural handling: "reserves" -> "reserve".
-    if (word.endsWith("s")) terms.add(word.slice(0, -1));
-    for (const extra of SYNONYMS[word] ?? []) terms.add(extra);
+  for (const raw of tokenize(question)) {
+    for (const word of new Set([raw, stripNepaliSuffix(raw)])) {
+      terms.add(word);
+      // Simple plural handling: "reserves" -> "reserve".
+      if (/^[a-z]+s$/.test(word)) terms.add(word.slice(0, -1));
+      for (const extra of SYNONYMS[word] ?? []) terms.add(extra);
+    }
   }
   return [...terms];
 }
@@ -58,7 +85,9 @@ export function rankIndicators(question: string, catalog: Indicator[]): ScoredIn
   return catalog
     .map((indicator) => {
       const haystack = new Set(
-        tokenize(`${indicator.name} ${indicator.code.replace(/_/g, " ")} ${indicator.description ?? ""}`),
+        tokenize(
+          `${indicator.name} ${indicator.name_ne ?? ""} ${indicator.code.replace(/_/g, " ")} ${indicator.description ?? ""} ${indicator.description_ne ?? ""}`,
+        ),
       );
       const score = terms.filter((term) => haystack.has(term)).length;
       return { indicator, score };

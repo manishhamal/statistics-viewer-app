@@ -1,3 +1,11 @@
+import { getAdminDbClient } from "@/server/db/client";
+import type { PeriodInput } from "@/lib/adminSchemas";
 
-import { getAdminDbClient } from '@/server/db/client';
-export async function createPeriod(input:{type:string;label:string;label_ad:string;start_date:string;end_date:string}){const {data,error}=await getAdminDbClient().from('periods').insert(input).select('*').single();if(error)throw new Error(error.message);return data;}
+export async function createPeriod(input: PeriodInput) {
+  const { data, error } = await getAdminDbClient().from("periods").insert(input).select("*").single();
+  if (error) {
+    if (error.code === "23505") throw new Error(`A ${input.type} period labelled "${input.label}" already exists.`);
+    throw new Error(error.message);
+  }
+  return data;
+}

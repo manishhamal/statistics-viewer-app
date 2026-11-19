@@ -1,4 +1,0 @@
-import Link from "next/link";
-export const revalidate = 300; // refresh the catalogue every 5 minutes
-import { getIndicators } from "@/server/stats/queries";
-export default async function ExplorePage(){const indicators=await getIndicators();return <div className="max-w-6xl mx-auto px-5 py-16 space-y-8"><p className="eyebrow-label">Evidence catalogue</p><h1 className="text-4xl font-bold">Explore indicators.</h1><div className="grid md:grid-cols-3 gap-5">{indicators.map(ind=><Link key={ind.id} href={`/indicators/${ind.code}`} className="surface-panel p-5 hover:border-[#2c6eaa]"><p className="text-xs uppercase text-[#617080]">{ind.frequency}</p><h2 className="mt-3 font-bold">{ind.name}</h2><p className="mt-2 text-sm text-[#617080]">{ind.description||'Official statistical indicator.'}</p></Link>)}</div></div>}

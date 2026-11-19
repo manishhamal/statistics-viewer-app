@@ -2,7 +2,7 @@
 import { GoogleGenAI } from "@google/genai";
 import { SEARCH_SYSTEM_PROMPT } from "./prompts";
 
-type Candidate = { code: string; name: string };
+type Candidate = { code: string; name: string; name_ne?: string };
 
 export async function interpretWithModel(question: string, candidates: Candidate[]) {
     const apiKey = process.env.GOOGLE_API_KEY;
