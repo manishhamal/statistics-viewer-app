@@ -31,7 +31,17 @@ where o.id = r.id and r.rn > 1;
 update observations set breakdown_key = '' where breakdown_key = '{}';
 
 -- Step 3: stop the non-canonical form from coming back.
-alter table observations
-  add constraint observations_breakdown_key_canonical check (breakdown_key <> '{}');
+-- Guarded so the migration can be re-run safely (Postgres has no "add constraint if not exists").
+do $$
+begin
+  if not exists (
+    select 1 from pg_constraint
+    where conname = 'observations_breakdown_key_canonical'
+      and conrelid = 'observations'::regclass
+  ) then
+    alter table observations
+      add constraint observations_breakdown_key_canonical check (breakdown_key <> '{}');
+  end if;
+end $$;
 
 commit;
