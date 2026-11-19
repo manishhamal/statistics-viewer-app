@@ -1,0 +1,18 @@
+{
+  "document_file_hash": "replace-with-registered-document-hash",
+  "extraction_method": "manual",
+  "notes": "Prototype manifest format; replace the period and values with exact PDF evidence.",
+  "rows": [
+    {
+      "indicator_code": "broad_money_m2",
+      "period_label": "September 2026",
+      "value": 6570000,
+      "unit": "NPR",
+      "scale": "millions",
+      "breakdown": {},
+      "page_number": 14,
+      "table_ref": "Table 5",
+      "is_provisional": false
+    }
+  ]
+}

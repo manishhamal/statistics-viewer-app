@@ -1,0 +1,4 @@
+
+insert into sources(name,short_name,website_url) values ('Nepal Rastra Bank','NRB','https://www.nrb.org.np'),('National Statistics Office','NSO','https://nsonepal.gov.np'),('Ministry of Finance','MoF','https://mof.gov.np') on conflict(short_name) do nothing;
+insert into indicators(code,name,description,unit,scale,frequency) values ('broad_money_m2','Broad Money Supply (M2)','Broad money supply reported by Nepal Rastra Bank.','NPR','millions','monthly'),('cpi_inflation_yoy','Consumer Price Inflation','Year-on-year consumer price inflation.','Percent','units','monthly'),('foreign_exchange_reserves_usd','Foreign Exchange Reserves','Gross foreign exchange reserves in US dollars.','USD','millions','monthly') on conflict(code) do nothing;
+insert into periods(type,label,label_ad,start_date,end_date) values ('month','September 2026','September 2026','2026-09-01','2026-09-30') on conflict(type,label) do nothing;

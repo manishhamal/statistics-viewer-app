@@ -1,0 +1,4 @@
+
+"use client";
+import { useState } from 'react';
+export default function CreatePeriodForm(){const [message,setMessage]=useState('');return <form onSubmit={e=>{e.preventDefault();setMessage('Period form restored. Submit the exact label shown in the official report.')}} className="surface-panel p-6 space-y-4"><h2 className="text-xl font-bold">Create period</h2><input required placeholder="Type: month, quarter, fiscal_year" className="w-full rounded-lg border p-3"/><input required placeholder="Source period label" className="w-full rounded-lg border p-3"/><input required placeholder="AD label" className="w-full rounded-lg border p-3"/><button className="rounded-lg bg-[#10283f] px-4 py-3 font-bold text-white">Create period</button>{message&&<p className="text-sm text-[#617080]">{message}</p>}</form>}

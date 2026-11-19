@@ -1,0 +1,4 @@
+
+"use client";
+import { publishAction, rejectAction } from '@/actions/adminActions';
+export default function ReviewQueueTable({rows}:{rows:Array<{id:string;value:number;page_number?:number|null}>}){return <div className="space-y-3">{rows.map(row=><div key={row.id} className="surface-panel p-5 flex items-center justify-between gap-4"><div><p className="font-bold">Candidate value: {row.value}</p><p className="text-xs text-[#617080]">Evidence page: {row.page_number||'—'}</p></div><div className="flex gap-2"><button onClick={()=>publishAction(row.id)} className="rounded bg-[#2f7d5b] px-3 py-2 text-sm font-bold text-white">Approve</button><button onClick={()=>rejectAction(row.id,'Rejected during curator review')} className="rounded bg-red-700 px-3 py-2 text-sm font-bold text-white">Reject</button></div></div>)}</div>}

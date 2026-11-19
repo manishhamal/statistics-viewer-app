@@ -1,0 +1,12 @@
+node_modules/
+.next/
+out/
+.env
+.env.local
+inputs/official-reports/
+*.log
+.DS_Store
+
+.env*.local
+*.tsbuildinfo
+.git-broken/
