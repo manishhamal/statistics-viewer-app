@@ -48,14 +48,14 @@ export default async function CuratorsPage() {
 
       <section className="surface-panel p-6 space-y-3">
         <h2 className="text-xl font-bold">Recent activity</h2>
-        {audit.length === 0 && <p className="text-sm text-[#617080]">No activity recorded yet.</p>}
-        <ul className="divide-y divide-[#dce2e4] text-sm">
+        {audit.length === 0 && <p className="text-sm text-muted">No activity recorded yet.</p>}
+        <ul className="divide-y divide-line text-sm">
           {audit.map((a) => (
             <li key={a.id} className="py-2 flex flex-wrap gap-x-3">
-              <span className="text-xs text-[#617080] w-36 shrink-0">{new Date(a.created_at).toLocaleString("en-GB")}</span>
+              <span className="text-xs text-muted w-36 shrink-0">{new Date(a.created_at).toLocaleString("en-GB")}</span>
               <span className="font-semibold">{a.actor_email}</span>
               <span>{ACTION_LABEL[a.action] ?? a.action}</span>
-              <span className="text-xs text-[#617080]">{describe((a.details ?? {}) as Record<string, unknown>)}</span>
+              <span className="text-xs text-muted">{describe((a.details ?? {}) as Record<string, unknown>)}</span>
             </li>
           ))}
         </ul>

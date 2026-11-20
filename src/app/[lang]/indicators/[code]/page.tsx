@@ -27,13 +27,13 @@ export default async function IndicatorPage({ params }: { params: Promise<{ lang
       <p className="eyebrow-label">{t.eyebrow}</p>
       <div>
         <h1 className="text-4xl font-bold">{localized(indicator, "name", lang)}</h1>
-        <p className="mt-2 text-[#617080]">{localized(indicator, "description", lang) || t.defaultDescription}</p>
-        <p className="mt-1 text-sm text-[#617080]">
+        <p className="mt-2 text-muted">{localized(indicator, "description", lang) || t.defaultDescription}</p>
+        <p className="mt-1 text-sm text-muted">
           {t.unit}: {scaleUnitLabel(indicator.unit, indicator.scale, lang)} · {t.frequency}: {frequencyLabel(indicator.frequency, lang)}
         </p>
       </div>
       {rows.length === 0 ? (
-        <p className="surface-panel p-6 text-[#617080]">{t.noData}</p>
+        <p className="surface-panel p-6 text-muted">{t.noData}</p>
       ) : (
         <>
           <StatChart data={spec.data} lang={lang} />

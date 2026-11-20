@@ -5,6 +5,7 @@ import { LOCALES, isLang } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import SiteHeader, { SiteFooter } from "@/components/SiteHeader";
 import LanguageToggle from "@/components/LanguageToggle";
+import ThemeScript from "@/components/ThemeScript";
 
 // Root layout for the public site. Both languages are pre-rendered and cached
 // separately (/en/... and /ne/...), so switching language is just a link.
@@ -30,9 +31,12 @@ export default async function PublicLayout({ children, params }: { children: Rea
   if (!isLang(lang)) notFound();
   const t = getDictionary(lang);
   return (
-    <html lang={lang}>
-      <body className="min-h-screen flex flex-col bg-[#f5f6f0] text-[#10283f]">
-        <SiteHeader lang={lang} toggle={<LanguageToggle lang={lang} title={t.toggle.title} />} />
+    <html lang={lang} suppressHydrationWarning>
+      <head>
+        <ThemeScript />
+      </head>
+      <body className="min-h-screen flex flex-col bg-paper text-ink">
+        <SiteHeader lang={lang} toggle={<LanguageToggle lang={lang} label={t.toggle.label} title={t.toggle.title} />} />
         <main className="flex-1">{children}</main>
         <SiteFooter lang={lang} />
       </body>

@@ -93,7 +93,7 @@ export default function DocumentRegistrationForm({ sources }: { sources: Source[
         </Field>
       </div>
 
-      <div className="rounded-lg border border-dashed border-[#dce2e4] p-4 space-y-4">
+      <div className="rounded-lg border border-dashed border-line p-4 space-y-4">
         <p className="text-sm font-semibold">The PDF: upload it, or give its official link (or both)</p>
         <Field label="Upload PDF" hint="Use this if the download from the link fails.">
           <input name="file" type="file" accept="application/pdf,.pdf" className={inputClass} />
@@ -103,7 +103,7 @@ export default function DocumentRegistrationForm({ sources }: { sources: Source[
         </Field>
       </div>
 
-      <button disabled={busy} className="rounded-lg bg-[#10283f] px-4 py-3 font-bold text-white disabled:opacity-60">
+      <button disabled={busy} className="rounded-lg bg-primary px-4 py-3 font-bold text-on-primary disabled:opacity-60">
         {busy ? "Registering…" : "Register document"}
       </button>
     </form>

@@ -7,8 +7,8 @@ import { PageHeader } from "@/components/admin/ui";
 export const dynamic = "force-dynamic";
 
 const STATUS_STYLE: Record<string, string> = {
-  registered: "bg-sky-50 text-sky-800",
-  extracted: "bg-emerald-50 text-emerald-800",
+  registered: "bg-sky-50 dark:bg-sky-950/40 text-sky-800 dark:text-sky-300",
+  extracted: "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300",
 };
 
 export default async function IngestionPage() {
@@ -28,23 +28,23 @@ export default async function IngestionPage() {
 
         <section className="space-y-3">
           <h2 className="text-xl font-bold">Registered documents ({documents.length})</h2>
-          {documents.length === 0 && <p className="text-sm text-[#617080]">None yet.</p>}
+          {documents.length === 0 && <p className="text-sm text-muted">None yet.</p>}
           {documents.map((d) => (
             <div key={d.id} className="surface-panel p-4 space-y-1">
               <div className="flex items-start justify-between gap-3">
                 <p className="font-semibold leading-snug">{d.title}</p>
-                <span className={`shrink-0 rounded px-2 py-0.5 text-xs font-semibold ${STATUS_STYLE[d.status] ?? "bg-slate-100 text-slate-700"}`}>
+                <span className={`shrink-0 rounded px-2 py-0.5 text-xs font-semibold ${STATUS_STYLE[d.status] ?? "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300"}`}>
                   {d.status}
                 </span>
               </div>
-              <p className="text-xs text-[#617080]">
+              <p className="text-xs text-muted">
                 {d.source?.short_name ?? "?"} · {d.period_covered} · published {d.publication_date}
               </p>
               <div className="flex gap-4 text-xs">
                 {d.file_url && (
-                  <a href={d.file_url} target="_blank" rel="noreferrer" className="text-[#2c6eaa]">Official PDF ↗</a>
+                  <a href={d.file_url} target="_blank" rel="noreferrer" className="text-link">Official PDF ↗</a>
                 )}
-                <Link href={`/admin/ingestion/extract?document=${d.id}`} className="text-[#2c6eaa] font-semibold">
+                <Link href={`/admin/ingestion/extract?document=${d.id}`} className="text-link font-semibold">
                   Stage values →
                 </Link>
               </div>

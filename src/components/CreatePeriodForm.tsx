@@ -67,7 +67,7 @@ export default function CreatePeriodForm() {
           <input name="end_date" type="date" required className={inputClass} />
         </Field>
       </div>
-      <button disabled={busy} className="rounded-lg bg-[#10283f] px-4 py-3 font-bold text-white disabled:opacity-60">
+      <button disabled={busy} className="rounded-lg bg-primary px-4 py-3 font-bold text-on-primary disabled:opacity-60">
         {busy ? "Creating…" : "Create period"}
       </button>
     </form>

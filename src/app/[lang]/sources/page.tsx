@@ -17,8 +17,8 @@ export default async function SourcesPage({ params }: LangParams) {
         {sources.map((source) => (
           <div key={source.id} className="surface-panel p-5">
             <h2 className="font-bold">{localized(source, "name", lang)}</h2>
-            <p className="mt-2 text-sm text-[#617080]">{source.short_name}</p>
-            <a className="mt-4 inline-block text-sm text-[#2c6eaa]" href={source.website_url} target="_blank" rel="noreferrer">
+            <p className="mt-2 text-sm text-muted">{source.short_name}</p>
+            <a className="mt-4 inline-block text-sm text-link" href={source.website_url} target="_blank" rel="noreferrer">
               {t.visit}
             </a>
           </div>

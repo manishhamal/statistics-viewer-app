@@ -30,7 +30,7 @@ export default function SetPasswordForm({ email }: { email: string }) {
     <form onSubmit={submit} className="surface-panel w-full max-w-md p-8 space-y-5">
       <p className="eyebrow-label">Curator access</p>
       <h1 className="text-3xl font-bold">Choose your password.</h1>
-      <p className="text-sm text-[#617080]">Signed in as {email}. Use at least 12 characters; a short phrase works well.</p>
+      <p className="text-sm text-muted">Signed in as {email}. Use at least 12 characters; a short phrase works well.</p>
       {error && <Notice kind="error">{error}</Notice>}
       <label className="block text-sm font-semibold">
         New password
@@ -40,7 +40,7 @@ export default function SetPasswordForm({ email }: { email: string }) {
         Repeat it
         <input type="password" autoComplete="new-password" required value={confirm} onChange={(e) => setConfirm(e.target.value)} className={inputClass} />
       </label>
-      <button disabled={pending} className="w-full rounded-lg bg-[#10283f] px-4 py-3 font-bold text-white disabled:opacity-60">
+      <button disabled={pending} className="w-full rounded-lg bg-primary px-4 py-3 font-bold text-on-primary disabled:opacity-60">
         {pending ? "Saving…" : "Save password"}
       </button>
     </form>

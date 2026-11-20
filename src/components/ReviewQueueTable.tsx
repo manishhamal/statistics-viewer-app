@@ -30,20 +30,20 @@ function ReviewCard({ item, currentUserId }: { item: ReviewItem; currentUserId: 
     <div className="surface-panel p-5 space-y-3">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="space-y-1">
-          <p className="text-xs uppercase tracking-wider text-[#617080]">
+          <p className="text-xs uppercase tracking-wider text-muted">
             {item.indicator?.name ?? "Unknown indicator"} · {item.period?.label ?? "?"}
             {item.period?.label_ad ? ` (${item.period.label_ad})` : ""}
           </p>
           <p className="text-2xl font-bold">
             {formatValue(item.value, item.unit, item.scale)}
-            {item.is_provisional && <span className="ml-2 align-middle rounded bg-amber-50 px-2 py-0.5 text-xs font-semibold text-amber-800">provisional</span>}
+            {item.is_provisional && <span className="ml-2 align-middle rounded bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 text-xs font-semibold text-amber-800 dark:text-amber-300">provisional</span>}
           </p>
           {breakdown.length > 0 && (
-            <p className="text-xs text-[#617080]">{breakdown.map(([k, v]) => `${k}: ${v}`).join(" · ")}</p>
+            <p className="text-xs text-muted">{breakdown.map(([k, v]) => `${k}: ${v}`).join(" · ")}</p>
           )}
-          <p className="text-sm text-[#617080]">
+          <p className="text-sm text-muted">
             {item.document?.file_url ? (
-              <a href={item.document.file_url} target="_blank" rel="noreferrer" className="text-[#2c6eaa]">
+              <a href={item.document.file_url} target="_blank" rel="noreferrer" className="text-link">
                 {item.document.title} ↗
               </a>
             ) : (
@@ -53,14 +53,14 @@ function ReviewCard({ item, currentUserId }: { item: ReviewItem; currentUserId: 
             {item.table_ref ? ` · ${item.table_ref}` : ""}
           </p>
           {item.currentPublished ? (
-            <p className={`text-xs font-semibold ${changed ? "text-amber-800" : "text-[#617080]"}`}>
+            <p className={`text-xs font-semibold ${changed ? "text-amber-800 dark:text-amber-300" : "text-muted"}`}>
               Approving replaces the published value {formatValue(item.currentPublished.value, item.currentPublished.unit, item.currentPublished.scale)}
               {changed ? "" : " (same number)"}.
             </p>
           ) : (
-            <p className="text-xs text-[#617080]">New value. Nothing is published for this period yet.</p>
+            <p className="text-xs text-muted">New value. Nothing is published for this period yet.</p>
           )}
-          <p className="text-xs text-[#617080]">
+          <p className="text-xs text-muted">
             Entered by {ownEntry ? "you" : item.stagedByEmail ?? "unknown (before curator tracking)"} on {item.created_at.slice(0, 10)}
           </p>
         </div>
@@ -78,7 +78,7 @@ function ReviewCard({ item, currentUserId }: { item: ReviewItem; currentUserId: 
             <button
               disabled={pending}
               onClick={() => setRejecting(true)}
-              className="rounded border border-red-700 px-3 py-2 text-sm font-bold text-red-700 disabled:opacity-60"
+              className="rounded border border-red-700 dark:border-red-400 px-3 py-2 text-sm font-bold text-red-700 dark:text-red-300 disabled:opacity-60"
             >
               Reject
             </button>
@@ -93,7 +93,7 @@ function ReviewCard({ item, currentUserId }: { item: ReviewItem; currentUserId: 
             value={reason}
             onChange={(e) => setReason(e.target.value)}
             placeholder="Why? e.g. wrong page, typo in value"
-            className="min-w-[240px] flex-1 rounded border border-[#dce2e4] p-2 text-sm"
+            className="min-w-[240px] flex-1 rounded border border-line p-2 text-sm"
           />
           <button
             disabled={pending || !reason.trim()}

@@ -9,7 +9,7 @@ export default async function SearchPage({ params }: LangParams) {
     <div className="max-w-5xl mx-auto px-5 py-16 space-y-8">
       <p className="eyebrow-label">{t.eyebrow}</p>
       <h1 className="text-4xl font-bold">{t.title}</h1>
-      <p className="max-w-2xl text-[#617080]">{t.intro}</p>
+      <p className="max-w-2xl text-muted">{t.intro}</p>
       <SearchBox lang={lang} t={t} />
     </div>
   );

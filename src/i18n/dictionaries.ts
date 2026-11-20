@@ -11,6 +11,7 @@ const en = {
   brand: { name: "Nepal Stats", tagline: "Official Statistics Viewer" },
   nav: { explore: "Explore", search: "Search", sources: "Sources", about: "About" },
   toggle: { label: "नेपाली", title: "नेपालीमा हेर्नुहोस्" },
+  theme: { title: "Switch between light and dark mode" },
   footer: {
     line1: "Official Statistics Viewer for Nepal — citing primary publications.",
     line2: "Every published data point should carry its source document and page reference. Not an official government website.",
@@ -99,6 +100,7 @@ const ne: Dictionary = {
   brand: { name: "नेपाल तथ्याङ्क", tagline: "आधिकारिक तथ्याङ्क दर्शक" },
   nav: { explore: "सूचकहरू", search: "खोज", sources: "स्रोतहरू", about: "हाम्रोबारे" },
   toggle: { label: "English", title: "View in English" },
+  theme: { title: "उज्यालो र अँध्यारो मोड बदल्नुहोस्" },
   footer: {
     line1: "नेपालका लागि आधिकारिक तथ्याङ्क दर्शक — मूल प्रकाशनहरूको सन्दर्भसहित।",
     line2: "प्रकाशित प्रत्येक तथ्याङ्कसँग त्यसको स्रोत कागजात र पृष्ठको सन्दर्भ हुनुपर्छ। यो सरकारी आधिकारिक वेबसाइट होइन।",

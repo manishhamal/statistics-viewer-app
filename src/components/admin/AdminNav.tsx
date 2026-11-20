@@ -20,25 +20,25 @@ export default function AdminNav({ email, role }: { email: string; role: "owner"
     router.refresh();
   }
   return (
-    <div className="border-b border-[#dce2e4] bg-white">
+    <div className="border-b border-line bg-surface">
       <div className="max-w-6xl mx-auto px-5 py-3 flex flex-wrap items-center gap-2 text-sm">
         <span className="eyebrow-label mr-2">Curator</span>
         {links.map(([href, label]) => (
           <Link
             key={href}
             href={href}
-            className={`rounded-md px-3 py-1.5 font-semibold ${pathname === href ? "bg-[#10283f] text-white" : "text-[#10283f] hover:bg-[#f5f6f0]"}`}
+            className={`rounded-md px-3 py-1.5 font-semibold ${pathname === href ? "bg-primary text-on-primary" : "text-ink hover:bg-paper"}`}
           >
             {label}
           </Link>
         ))}
-        <span className="ml-auto text-xs text-[#617080]">
+        <span className="ml-auto text-xs text-muted">
           {email} · {role}
         </span>
-        <Link href="/admin/set-password" className="rounded-md px-3 py-1.5 font-semibold hover:bg-[#f5f6f0]">
+        <Link href="/admin/set-password" className="rounded-md px-3 py-1.5 font-semibold hover:bg-paper">
           Change password
         </Link>
-        <button onClick={signOut} className="rounded-md border border-[#dce2e4] px-3 py-1.5 font-semibold hover:bg-[#f5f6f0]">
+        <button onClick={signOut} className="rounded-md border border-line px-3 py-1.5 font-semibold hover:bg-paper">
           Sign out
         </button>
       </div>

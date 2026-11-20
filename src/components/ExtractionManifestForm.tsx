@@ -34,7 +34,7 @@ const blankRow = (prev?: Row): Row => ({
   isProvisional: false,
 });
 
-const cell = "w-full rounded-md border border-[#dce2e4] bg-white p-2 text-sm";
+const cell = "w-full rounded-md border border-line bg-surface p-2 text-sm";
 
 export default function ExtractionManifestForm({
   documents,
@@ -113,13 +113,13 @@ export default function ExtractionManifestForm({
           </select>
         </Field>
         {doc?.file_url && (
-          <a href={doc.file_url} target="_blank" rel="noreferrer" className="inline-block text-sm text-[#2c6eaa]">
+          <a href={doc.file_url} target="_blank" rel="noreferrer" className="inline-block text-sm text-link">
             Open the PDF to read values from ↗
           </a>
         )}
         {documents.length === 0 && (
-          <p className="text-sm text-[#617080]">
-            No documents yet. <Link href="/admin/ingestion" className="text-[#2c6eaa]">Register one first →</Link>
+          <p className="text-sm text-muted">
+            No documents yet. <Link href="/admin/ingestion" className="text-link">Register one first →</Link>
           </p>
         )}
       </section>
@@ -127,8 +127,8 @@ export default function ExtractionManifestForm({
       <section className="surface-panel p-6 space-y-4">
         <div className="flex flex-wrap items-baseline justify-between gap-2">
           <h2 className="text-xl font-bold">Values ({rows.length})</h2>
-          <p className="text-xs text-[#617080]">
-            Period missing? <Link href="/admin/ingestion/periods" className="text-[#2c6eaa]">Create it →</Link>
+          <p className="text-xs text-muted">
+            Period missing? <Link href="/admin/ingestion/periods" className="text-link">Create it →</Link>
           </p>
         </div>
         {error && <Notice kind="error">{error}</Notice>}
@@ -140,14 +140,14 @@ export default function ExtractionManifestForm({
 
         <div className="space-y-3">
           {rows.map((r, i) => (
-            <div key={r.key} className="rounded-lg border border-[#dce2e4] p-3 space-y-2">
+            <div key={r.key} className="rounded-lg border border-line p-3 space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-[#617080]">Row {i + 1}</span>
+                <span className="text-xs font-bold text-muted">Row {i + 1}</span>
                 {rows.length > 1 && (
                   <button
                     type="button"
                     onClick={() => setRows((rs) => rs.filter((x) => x.key !== r.key))}
-                    className="text-xs text-red-700"
+                    className="text-xs text-red-700 dark:text-red-300"
                   >
                     Remove
                   </button>
@@ -194,10 +194,10 @@ export default function ExtractionManifestForm({
         </div>
 
         <div className="flex flex-wrap gap-3">
-          <button type="button" onClick={() => setRows((rs) => [...rs, blankRow(rs[rs.length - 1])])} className="rounded-lg border border-[#10283f] px-4 py-2.5 text-sm font-bold">
+          <button type="button" onClick={() => setRows((rs) => [...rs, blankRow(rs[rs.length - 1])])} className="rounded-lg border border-ink px-4 py-2.5 text-sm font-bold">
             + Add row
           </button>
-          <button type="button" disabled={busy} onClick={submit} className="rounded-lg bg-[#10283f] px-4 py-2.5 text-sm font-bold text-white disabled:opacity-60">
+          <button type="button" disabled={busy} onClick={submit} className="rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-on-primary disabled:opacity-60">
             {busy ? "Staging…" : "Stage for review"}
           </button>
         </div>

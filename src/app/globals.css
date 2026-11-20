@@ -1,5 +1,17 @@
 @import "tailwindcss";
-:root{--background:#f5f6f0;--foreground:#10283f;--navy:#10283f;--deep:#071827;--paper:#f5f6f0;--surface:#fff;--lime:#d8f35b;--blue:#2c6eaa;--muted:#617080;--border:#dce2e4}*{box-sizing:border-box}html,body{margin:0;background:var(--paper);color:var(--foreground);font-family:Arial,"Noto Sans Devanagari","Nirmala UI",Mangal,Helvetica,sans-serif}::selection{background:var(--lime);color:var(--navy)}:focus-visible{outline:3px solid var(--lime);outline-offset:3px}.surface-panel{background:#fff;border:1px solid var(--border);border-radius:14px;box-shadow:0 8px 24px rgb(16 40 63 / 5%)}.eyebrow-label{color:var(--blue);font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+
+/* Dark mode is a class on <html>, set before paint by ThemeScript. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Theme tokens. Components use these (bg-paper, text-muted, border-line, ...) so dark mode only swaps values here.
+   navy (header, matte black) , deep (hero/footer, darker matte black) and lime are brand colours
+   and stay the same in both themes. Greys are neutral (no blue tint) for a flat, matte look. */
+:root{--paper:#f5f5f2;--surface:#fff;--ink:#1a1a1a;--muted:#666664;--line:#e0e0dc;--line-soft:#efefec;--link:#2c6eaa;--good:#2f7d5b;--warn:#b7791f;--primary:#1a1a1a;--on-primary:#fff;--navy:#1a1a1a;--deep:#111111;--lime:#d8f35b;color-scheme:light}
+.dark{--paper:#121212;--surface:#1c1c1c;--ink:#ebebea;--muted:#a3a3a0;--line:#2e2e2e;--line-soft:#242424;--link:#7db6ea;--good:#5cc497;--warn:#e3ad52;--primary:#d8f35b;--on-primary:#111111;color-scheme:dark}
+
+@theme inline{--color-paper:var(--paper);--color-surface:var(--surface);--color-ink:var(--ink);--color-muted:var(--muted);--color-line:var(--line);--color-line-soft:var(--line-soft);--color-link:var(--link);--color-good:var(--good);--color-warn:var(--warn);--color-primary:var(--primary);--color-on-primary:var(--on-primary);--color-navy:var(--navy);--color-deep:var(--deep);--color-lime:var(--lime)}
+
+*{box-sizing:border-box}html,body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,"Noto Sans Devanagari","Nirmala UI",Mangal,Helvetica,sans-serif}::selection{background:var(--lime);color:var(--navy)}:focus-visible{outline:3px solid var(--lime);outline-offset:3px}.surface-panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 24px rgb(0 0 0 / 5%)}.eyebrow-label{color:var(--link);font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
 
 /* Nepali: Devanagari-first fonts, roomier lines, and no letter-spacing (it breaks conjunct letters). */
 :lang(ne) body,body:lang(ne){font-family:"Noto Sans Devanagari","Nirmala UI",Mangal,Arial,sans-serif;line-height:1.6}

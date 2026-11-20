@@ -10,8 +10,8 @@ export default function NotFound() {
   return (
     <div className="max-w-3xl mx-auto px-5 py-24 space-y-4">
       <h1 className="text-4xl font-bold">{t.title}</h1>
-      <p className="text-[#617080]">{t.text}</p>
-      <Link href={`/${lang}`} className="inline-block font-semibold text-[#2c6eaa]">{t.home}</Link>
+      <p className="text-muted">{t.text}</p>
+      <Link href={`/${lang}`} className="inline-block font-semibold text-link">{t.home}</Link>
     </div>
   );
 }

@@ -22,17 +22,17 @@ export default async function ReviewPage() {
       {rows.length === 0 ? (
         <div className="surface-panel p-8 space-y-4">
           <p className="font-semibold">The review queue is empty.</p>
-          <p className="text-sm text-[#617080]">To add data: register the official PDF, then enter its values.</p>
+          <p className="text-sm text-muted">To add data: register the official PDF, then enter its values.</p>
           <div className="flex flex-wrap gap-3">
-            <Link href="/admin/ingestion" className="rounded-lg bg-[#10283f] px-4 py-3 text-sm font-bold text-white">1 · Register document</Link>
-            <Link href="/admin/ingestion/extract" className="rounded-lg border border-[#10283f] px-4 py-3 text-sm font-bold">3 · Stage values</Link>
+            <Link href="/admin/ingestion" className="rounded-lg bg-primary px-4 py-3 text-sm font-bold text-on-primary">1 · Register document</Link>
+            <Link href="/admin/ingestion/extract" className="rounded-lg border border-ink px-4 py-3 text-sm font-bold">3 · Stage values</Link>
           </div>
         </div>
       ) : (
         <>
           <p className="text-sm font-semibold">
             {rows.length} value(s) waiting for review
-            {mine > 0 && <span className="font-normal text-[#617080]"> · {mine} entered by you need another curator to approve</span>}
+            {mine > 0 && <span className="font-normal text-muted"> · {mine} entered by you need another curator to approve</span>}
           </p>
           <ReviewQueueTable rows={rows} currentUserId={curator.id} />
         </>

@@ -17,10 +17,10 @@ export default async function ExplorePage({ params }: LangParams) {
       <h1 className="text-4xl font-bold">{t.title}</h1>
       <div className="grid md:grid-cols-3 gap-5">
         {indicators.map((ind) => (
-          <Link key={ind.id} href={href(lang, `/indicators/${ind.code}`)} className="surface-panel p-5 hover:border-[#2c6eaa]">
-            <p className="text-xs uppercase text-[#617080]">{frequencyLabel(ind.frequency, lang)}</p>
+          <Link key={ind.id} href={href(lang, `/indicators/${ind.code}`)} className="surface-panel p-5 hover:border-link">
+            <p className="text-xs uppercase text-muted">{frequencyLabel(ind.frequency, lang)}</p>
             <h2 className="mt-3 font-bold">{localized(ind, "name", lang)}</h2>
-            <p className="mt-2 text-sm text-[#617080]">{localized(ind, "description", lang) || t.defaultDescription}</p>
+            <p className="mt-2 text-sm text-muted">{localized(ind, "description", lang) || t.defaultDescription}</p>
           </Link>
         ))}
       </div>

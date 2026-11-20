@@ -22,16 +22,16 @@ export default async function PeriodsPage() {
           <h2 className="text-xl font-bold">Existing periods ({periods.length})</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="text-left text-xs uppercase text-[#617080]">
+              <thead className="text-left text-xs uppercase text-muted">
                 <tr><th className="py-2 pr-3">Label</th><th className="py-2 pr-3">AD</th><th className="py-2 pr-3">Type</th><th className="py-2">Dates</th></tr>
               </thead>
               <tbody>
                 {periods.map((p) => (
-                  <tr key={p.id} className="border-t border-[#dce2e4]">
+                  <tr key={p.id} className="border-t border-line">
                     <td className="py-2 pr-3 font-semibold">{p.label}</td>
                     <td className="py-2 pr-3">{p.label_ad}</td>
                     <td className="py-2 pr-3">{p.type.replace("_", " ")}</td>
-                    <td className="py-2 text-xs text-[#617080]">{p.start_date} → {p.end_date}</td>
+                    <td className="py-2 text-xs text-muted">{p.start_date} → {p.end_date}</td>
                   </tr>
                 ))}
               </tbody>
