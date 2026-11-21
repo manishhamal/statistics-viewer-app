@@ -29,7 +29,7 @@ function LoginForm() {
       setError(error.message);
       return;
     }
-    router.push("/admin/review");
+    router.push("/admin/tasks");
     router.refresh();
   }
 

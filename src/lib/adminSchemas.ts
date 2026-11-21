@@ -55,6 +55,23 @@ export const manifestInputSchema = z.object({
 export type ManifestInput = z.infer<typeof manifestInputSchema>;
 export type ManifestRow = z.infer<typeof manifestRowSchema>;
 
+const optionalText = (max: number) => z.string().trim().max(max).optional().or(z.literal("")).transform((v) => v || null);
+const webUrl = z.string().trim().url("Enter a full web address starting with https://.").refine((u) => /^https?:\/\//i.test(u), "Use an http(s) address.");
+
+export const TASK_KINDS = ["document", "note"] as const;
+export const taskInputSchema = z.object({
+  kind: z.enum(TASK_KINDS),
+  title: z.string().trim().min(3, "Say what needs doing.").max(200),
+  notes: optionalText(2000),
+  sourceId: z.string().regex(uuidShape).optional().or(z.literal("")).transform((v) => v || null),
+  periodHint: optionalText(100),
+  docLink: webUrl.optional().or(z.literal("")).transform((v) => v || null),
+  assigneeId: z.string().regex(uuidShape, "Choose who does it."),
+  dueDate: isoDate.optional().or(z.literal("")).transform((v) => v || null),
+}).refine((t) => t.kind === "note" || t.sourceId, { message: "Choose the source for a document task.", path: ["sourceId"] });
+export type TaskInput = z.infer<typeof taskInputSchema>;
+export const webUrlSchema = webUrl;
+
 export function firstIssue(error: z.ZodError): string {
   const issue = error.issues[0];
   if (!issue) return "Invalid input.";

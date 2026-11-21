@@ -16,6 +16,15 @@ const ACTION_LABEL: Record<string, string> = {
   "curator.password_set": "set their password",
   "curator.deactivate": "deactivated a curator",
   "curator.reactivate": "reactivated a curator",
+  "task.create": "created a task",
+  "task.reassign": "reassigned a task",
+  "task.cancel": "cancelled a task",
+  "task.reopen": "reopened a task",
+  "task.choose_link": "chose a PDF for a task",
+  "task.register": "registered a task's document",
+  "task.block": "marked a task as blocked",
+  "task.complete": "finished a task",
+  "source.set_page": "set a source's publications page",
 };
 
 function describe(details: Record<string, unknown>) {

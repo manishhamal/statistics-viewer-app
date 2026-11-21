@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { requireCuratorPage } from "@/server/auth/session";
 import { getAdminDocuments, getAdminSources } from "@/server/admin/adminData";
-import DocumentRegistrationForm from "@/components/DocumentRegistrationForm";
+import DocumentRegistrationForm, { type RegistrationPrefill } from "@/components/DocumentRegistrationForm";
+import { getTaskForWork } from "@/server/tasks/taskData";
 import { PageHeader } from "@/components/admin/ui";
 
 export const dynamic = "force-dynamic";
@@ -11,9 +12,25 @@ const STATUS_STYLE: Record<string, string> = {
   extracted: "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300",
 };
 
-export default async function IngestionPage() {
-  await requireCuratorPage();
-  const [sources, documents] = await Promise.all([getAdminSources(), getAdminDocuments()]);
+export default async function IngestionPage({ searchParams }: { searchParams: Promise<{ task?: string }> }) {
+  const curator = await requireCuratorPage();
+  const [{ task: taskId }, sources, documents] = await Promise.all([searchParams, getAdminSources(), getAdminDocuments()]);
+
+  // Opened from a task: fill the form in from it.
+  let prefill: RegistrationPrefill | undefined;
+  if (taskId) {
+    const task = await getTaskForWork(taskId, curator).catch(() => null);
+    if (task?.kind === "document" && !task.document) {
+      prefill = {
+        taskId: task.id,
+        taskTitle: task.title,
+        sourceId: task.source?.id ?? "",
+        title: task.title,
+        periodCovered: task.periodHint ?? "",
+        fileUrl: task.docLink ?? "", // only ever set to a link checked to open a PDF
+      };
+    }
+  }
 
   return (
     <div className="max-w-6xl mx-auto px-5 py-12 space-y-8">
@@ -24,7 +41,7 @@ export default async function IngestionPage() {
       />
 
       <div className="grid gap-8 lg:grid-cols-[1.1fr_.9fr] items-start">
-        <DocumentRegistrationForm sources={sources} />
+        <DocumentRegistrationForm key={prefill?.taskId ?? "blank"} sources={sources} prefill={prefill} />
 
         <section className="space-y-3">
           <h2 className="text-xl font-bold">Registered documents ({documents.length})</h2>

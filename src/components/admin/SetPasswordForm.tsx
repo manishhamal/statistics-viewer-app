@@ -20,7 +20,7 @@ export default function SetPasswordForm({ email }: { email: string }) {
       const result = await setPasswordAction(password);
       if (!result.ok) setError(result.error);
       else {
-        router.push("/admin/review");
+        router.push("/admin/tasks");
         router.refresh();
       }
     });

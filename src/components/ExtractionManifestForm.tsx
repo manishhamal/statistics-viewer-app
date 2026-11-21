@@ -41,11 +41,14 @@ export default function ExtractionManifestForm({
   indicators,
   periods,
   initialDocumentId,
+  taskId,
 }: {
   documents: Doc[];
   indicators: Indicator[];
   periods: Period[];
   initialDocumentId?: string;
+  /** Set when opened from a task, so the curator is sent back to it. */
+  taskId?: string;
 }) {
   const router = useRouter();
   const [documentId, setDocumentId] = useState(
@@ -134,7 +137,12 @@ export default function ExtractionManifestForm({
         {error && <Notice kind="error">{error}</Notice>}
         {success && (
           <Notice kind="success">
-            {success} <Link href="/admin/review" className="font-semibold underline">Go to review queue →</Link>
+            {success}{" "}
+            {taskId ? (
+              <Link href={`/admin/tasks/${taskId}`} className="font-semibold underline">Back to the task →</Link>
+            ) : (
+              <Link href="/admin/review" className="font-semibold underline">Go to review queue →</Link>
+            )}
           </Notice>
         )}
 

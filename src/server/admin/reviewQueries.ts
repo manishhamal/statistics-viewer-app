@@ -22,16 +22,18 @@ export interface ReviewItem {
 
 const one = <T,>(x: T | T[] | null): T | null => (Array.isArray(x) ? x[0] ?? null : x);
 
-export async function getStagedObservations(): Promise<ReviewItem[]> {
+/** All staged values, or only those from one document (when opened from a task). */
+export async function getStagedObservations(documentId?: string): Promise<ReviewItem[]> {
   const db = getAdminDbClient();
-  const { data, error } = await db
+  let query = db
     .from("observations")
     .select(
       "id,indicator_id,period_id,value,unit,scale,is_provisional,page_number,table_ref,breakdown,breakdown_key,created_at,staged_by," +
         "indicator:indicators(code,name),period:periods(label,label_ad),document:documents(title,file_url)",
     )
-    .eq("status", "staged")
-    .order("created_at");
+    .eq("status", "staged");
+  if (documentId) query = query.eq("document_id", documentId);
+  const { data, error } = await query.order("created_at");
   if (error) throw new Error(error.message);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const rows = (data ?? []) as any[];

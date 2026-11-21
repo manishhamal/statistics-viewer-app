@@ -74,6 +74,6 @@ export async function requireCuratorPage(): Promise<Curator> {
 
 export async function requireOwnerPage(): Promise<Curator> {
   const curator = await requireCuratorPage();
-  if (curator.role !== "owner") redirect("/admin/review");
+  if (curator.role !== "owner") redirect("/admin/tasks");
   return curator;
 }

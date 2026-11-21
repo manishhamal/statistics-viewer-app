@@ -8,7 +8,17 @@ type Source = { id: string; name: string; short_name: string };
 
 const label = (s: string) => s.replace(/_/g, " ");
 
-export default function DocumentRegistrationForm({ sources }: { sources: Source[] }) {
+/** Values carried over from a task, so the curator only checks them. */
+export interface RegistrationPrefill {
+  taskId: string;
+  taskTitle: string;
+  sourceId: string;
+  title: string;
+  periodCovered: string;
+  fileUrl: string;
+}
+
+export default function DocumentRegistrationForm({ sources, prefill }: { sources: Source[]; prefill?: RegistrationPrefill }) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -30,6 +40,12 @@ export default function DocumentRegistrationForm({ sources }: { sources: Source[
       const res = await fetch("/api/admin/ingestion/documents", { method: "POST", body: data });
       const body = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(body.error ?? `Request failed (HTTP ${res.status}).`);
+      if (body.taskId) {
+        // Back to the task, which now shows the next step.
+        router.push(`/admin/tasks/${body.taskId}`);
+        router.refresh();
+        return;
+      }
       setSuccess(
         body.duplicate
           ? `This PDF is already registered as "${body.title}". Nothing new was added.`
@@ -47,12 +63,20 @@ export default function DocumentRegistrationForm({ sources }: { sources: Source[
   return (
     <form onSubmit={submit} className="surface-panel p-6 space-y-5">
       <h2 className="text-xl font-bold">Register a PDF</h2>
+      {prefill && (
+        <>
+          <input type="hidden" name="taskId" value={prefill.taskId} />
+          <p className="rounded-lg bg-paper p-3 text-sm">
+            For task: <strong>{prefill.taskTitle}</strong>. Filled in from the task. Check each field against the PDF&apos;s cover, then register.
+          </p>
+        </>
+      )}
       {error && <Notice kind="error">{error}</Notice>}
       {success && <Notice kind="success">{success}</Notice>}
 
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label="Publisher">
-          <select name="sourceId" required className={inputClass} defaultValue="">
+          <select name="sourceId" required className={inputClass} defaultValue={prefill?.sourceId ?? ""}>
             <option value="" disabled>Choose a source…</option>
             {sources.map((s) => (
               <option key={s.id} value={s.id}>{s.short_name} — {s.name}</option>
@@ -60,7 +84,7 @@ export default function DocumentRegistrationForm({ sources }: { sources: Source[
           </select>
         </Field>
         <Field label="Document title" hint="Exactly as printed on the cover.">
-          <input name="title" required minLength={3} className={inputClass} />
+          <input name="title" required minLength={3} defaultValue={prefill?.title} className={inputClass} />
         </Field>
         <Field label="Document type">
           <select name="docType" required className={inputClass} defaultValue="monthly_report">
@@ -71,7 +95,7 @@ export default function DocumentRegistrationForm({ sources }: { sources: Source[
           <input name="publicationDate" type="date" required className={inputClass} />
         </Field>
         <Field label="Period covered" hint='As the report states it, e.g. "FY 2080/81" or "September 2026".'>
-          <input name="periodCovered" required className={inputClass} />
+          <input name="periodCovered" required defaultValue={prefill?.periodCovered} className={inputClass} />
         </Field>
         <Field label="Coverage">
           <select name="coverageType" required className={inputClass} defaultValue="monthly">
@@ -99,7 +123,7 @@ export default function DocumentRegistrationForm({ sources }: { sources: Source[
           <input name="file" type="file" accept="application/pdf,.pdf" className={inputClass} />
         </Field>
         <Field label="Official PDF link" hint="Shown to the public as the source. Downloaded if no file is uploaded.">
-          <input name="fileUrl" type="url" placeholder="https://www.nrb.org.np/contents/uploads/…pdf" className={inputClass} />
+          <input name="fileUrl" type="url" defaultValue={prefill?.fileUrl} placeholder="https://www.nrb.org.np/contents/uploads/…pdf" className={inputClass} />
         </Field>
       </div>
 

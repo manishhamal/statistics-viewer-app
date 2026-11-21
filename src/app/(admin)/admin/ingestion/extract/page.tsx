@@ -5,9 +5,11 @@ import { PageHeader } from "@/components/admin/ui";
 
 export const dynamic = "force-dynamic";
 
-export default async function ExtractPage({ searchParams }: { searchParams: Promise<{ document?: string }> }) {
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+export default async function ExtractPage({ searchParams }: { searchParams: Promise<{ document?: string; task?: string }> }) {
   await requireCuratorPage();
-  const [{ document }, documents, indicators, periods] = await Promise.all([
+  const [{ document, task }, documents, indicators, periods] = await Promise.all([
     searchParams,
     getAdminDocuments(),
     getAdminIndicators(),
@@ -26,6 +28,7 @@ export default async function ExtractPage({ searchParams }: { searchParams: Prom
         indicators={indicators}
         periods={periods}
         initialDocumentId={document}
+        taskId={task && UUID.test(task) ? task : undefined}
       />
     </div>
   );

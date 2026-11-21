@@ -4,15 +4,22 @@ import { usePathname, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
 const LINKS = [
+  ["/admin/tasks", "My tasks"],
   ["/admin/review", "Review queue"],
-  ["/admin/ingestion", "1 · Documents"],
-  ["/admin/ingestion/periods", "2 · Periods"],
-  ["/admin/ingestion/extract", "3 · Stage values"],
+  ["/admin/ingestion", "Documents"],
+  ["/admin/ingestion/periods", "Periods"],
+  ["/admin/ingestion/extract", "Stage values"],
+] as const;
+const OWNER_LINKS = [
+  ["/admin/tasks/manage", "Manage tasks"],
+  ["/admin/curators", "Curators"],
 ] as const;
 
 export default function AdminNav({ email, role }: { email: string; role: "owner" | "curator" }) {
   const pathname = usePathname();
-  const links = role === "owner" ? [...LINKS, ["/admin/curators", "Curators"] as const] : LINKS;
+  const links = role === "owner" ? [...LINKS, ...OWNER_LINKS] : LINKS;
+  // A task's own page (/admin/tasks/<id>) counts as "My tasks".
+  const isTaskPage = /^\/admin\/tasks\/(?!manage$)[^/]+$/.test(pathname);
   const router = useRouter();
   async function signOut() {
     await createClient().auth.signOut();
@@ -27,7 +34,7 @@ export default function AdminNav({ email, role }: { email: string; role: "owner"
           <Link
             key={href}
             href={href}
-            className={`rounded-md px-3 py-1.5 font-semibold ${pathname === href ? "bg-primary text-on-primary" : "text-ink hover:bg-paper"}`}
+            className={`rounded-md px-3 py-1.5 font-semibold ${pathname === href || (isTaskPage && href === "/admin/tasks") ? "bg-primary text-on-primary" : "text-ink hover:bg-paper"}`}
           >
             {label}
           </Link>
