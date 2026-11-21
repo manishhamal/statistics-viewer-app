@@ -12,8 +12,8 @@ export async function downloadPdf(url: string): Promise<Buffer> {
   return Buffer.from(await response.arrayBuffer());
 }
 
-// Hashes the PDF, keeps a local copy in inputs/official-reports/<hash>.pdf, and
-// registers it. The same file (same hash) is never registered twice.
+// Hashes the PDF, keeps a local copy in inputs/official-reports/<hash>.pdf when the
+// server allows writing files, and registers it. The same file (same hash) is never registered twice.
 export async function registerDocument(input: DocumentInput, bytes: Buffer, registeredBy: string) {
   if (bytes.length === 0 || bytes.length > MAX_BYTES) throw new Error("PDF must be between 1 byte and 50 MB.");
   if (bytes.subarray(0, 5).toString("ascii") !== "%PDF-") throw new Error("That file is not a valid PDF.");
@@ -21,9 +21,15 @@ export async function registerDocument(input: DocumentInput, bytes: Buffer, regi
   const db = getAdminDbClient();
   const hash = createHash("sha256").update(bytes).digest("hex");
 
-  const dir = path.join(process.cwd(), "inputs", "official-reports");
-  await mkdir(dir, { recursive: true });
-  await writeFile(path.join(dir, `${hash}.pdf`), bytes, { flag: "wx" }).catch(() => undefined); // already saved
+  // The local archive is a convenience for running the app on your own computer. Hosted servers
+  // (Vercel) have a read-only project folder, so a failed write must never block registration.
+  try {
+    const dir = path.join(process.cwd(), "inputs", "official-reports");
+    await mkdir(dir, { recursive: true });
+    await writeFile(path.join(dir, `${hash}.pdf`), bytes, { flag: "wx" }).catch(() => undefined); // already saved
+  } catch {
+    // Not archived locally; the hash and details are still saved to the database below.
+  }
 
   const { data: existing } = await db.from("documents").select("id,title,status").eq("file_hash", hash).maybeSingle();
   if (existing) return { id: existing.id, fileHash: hash, duplicate: true, status: existing.status, title: existing.title };

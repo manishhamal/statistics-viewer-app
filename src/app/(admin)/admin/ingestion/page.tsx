@@ -20,7 +20,7 @@ export default async function IngestionPage() {
       <PageHeader
         eyebrow="Step 1 · Register document"
         title="Register an official source document."
-        intro="Each PDF is hashed so the same file is never registered twice, and a copy is kept in inputs/official-reports/. Registering publishes nothing; values go live only after review."
+        intro="Each PDF is hashed so the same file is never registered twice, and its details are saved in the database. Registering publishes nothing; values go live only after review."
       />
 
       <div className="grid gap-8 lg:grid-cols-[1.1fr_.9fr] items-start">
